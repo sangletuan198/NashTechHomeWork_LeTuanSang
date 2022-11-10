@@ -1,18 +1,24 @@
 {
 	"info": {
-		"_postman_id": "eeddb7d3-69ac-4158-9945-8c55e115dd64",
+		"_postman_id": "39129124-7ef4-4841-ab22-41adb8d265fb",
 		"name": "Rookies_Sang_AUTO",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "22366919"
 	},
 	"item": [
 		{
-			"name": "GET /todos (200)",
+			"name": "3.  GET /todos (200)",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"console.log(jsonData.todos[0].id);\r",
+							"pm.environment.set(\"valid_id\",jsonData.todos[0].id);\r",
+							"pm.test(\"Check status code: 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
 							""
 						],
 						"type": "text/javascript"
@@ -117,13 +123,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/todos/1827",
+					"raw": "{{url}}/todos/{{valid_id}}",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"todos",
-						"1827"
+						"{{valid_id}}"
 					]
 				}
 			},
@@ -140,7 +146,7 @@
 							"    pm.response.to.have.status(404);\r",
 							"});\r",
 							"pm.test(\"Body matches string\", function () {\r",
-							"    pm.expect(pm.response.text()).to.include(\"Could not find an instance with todos/10000\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"Could not find an instance with todos/000\");\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -158,13 +164,13 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{url}}/todos/10000",
+					"raw": "{{url}}/todos/000",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"todos",
-						"10000"
+						"000"
 					]
 				}
 			},
@@ -384,13 +390,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/todos/1827",
+					"raw": "{{url}}/todos/{{valid_id}}",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"todos",
-						"1827"
+						"{{valid_id}}"
 					]
 				}
 			},
@@ -407,9 +413,7 @@
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
 							"\r",
-							"pm.test(\"Body matches string\", function () {\r",
-							"    pm.expect(pm.response.text()).to.include(\"1788\");\r",
-							"});"
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -428,13 +432,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/todos/1788",
+					"raw": "{{url}}/todos/{{valid_id}}",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"todos",
-						"1788"
+						"{{valid_id}}"
 					]
 				}
 			},
@@ -447,9 +451,16 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Content-Type is present\", function () {\r",
-							"    pm.response.to.have.header(\"Allow\");\r",
-							"});"
+							"pm.test(\"Check status code: 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"var dataHeader = pm.response.headers.get(\"Allow\");\r",
+							"\r",
+							"pm.test(\"check Allow header has OPTIONS value\", function(){\r",
+							"    pm.expect(dataHeader).to.contain(\"OPTIONS\");\r",
+							"})\r",
+							""
 						],
 						"type": "text/javascript"
 					}
